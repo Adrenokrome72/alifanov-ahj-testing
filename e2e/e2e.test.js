@@ -3,22 +3,22 @@
  */
 import puppeteer from 'puppeteer';
 
-describe('Форма валидатора кредитных карт', () => {
+describe('E2E Tests', () => {
   let browser;
   let page;
 
   beforeAll(async () => {
-    await new Promise(resolve => setTimeout(resolve, 5000));
     browser = await puppeteer.launch({ headless: true });
     page = await browser.newPage();
     await page.goto('http://localhost:8080');
+    await new Promise(resolve => setTimeout(resolve, 5000));
   });
 
   afterAll(async () => {
     await browser.close();
   });
 
-  it(async () => {
+  it('should display "Server is ready" on the page', async () => {
     const text = await page.evaluate(() => document.body.textContent);
     expect(text).toContain('Server is ready');
   });
