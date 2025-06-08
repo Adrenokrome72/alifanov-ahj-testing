@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Валидатор кредитных карт</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="container">
+    <div class="card-images">
+      <img src="images/visa.png" class="card-image" data-system="visa" alt="Visa">
+      <img src="images/mastercard.png" class="card-image" data-system="mastercard" alt="Mastercard">
+      <img src="images/mir.png" class="card-image" data-system="mir" alt="Мир">
+    </div>
+    <form id="card-form">
+      <input type="text" id="card-number" placeholder="Введите номер карты" maxlength="16">
+      <button type="submit">Подтвердить</button>
+    </form>
+    <div id="result"></div>
+  </div>
+  <script src="js/index.js" type="module"></script>
+</body>
+</html>

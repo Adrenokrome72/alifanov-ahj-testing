@@ -1,0 +1,89 @@
+.container {
+  width: 500px;
+  height: 200px;
+  background: linear-gradient(135deg, #87ceeb, #98fb98);
+  border-radius: 15px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  margin: 50px auto;
+  padding: 15px;
+  position: relative;
+  overflow: hidden;
+}
+
+.card-images {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 10px;
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0.7);
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.card-image {
+  width: 45px;
+  height: auto;
+  filter: grayscale(1);
+  transition: filter 0.3s ease;
+}
+
+.card-image[data-system="visa"]:not([style*="grayscale(1)"]),
+.card-image[data-system="mastercard"]:not([style*="grayscale(1)"]),
+.card-image[data-system="mir"]:not([style*="grayscale(1)"]) {
+  filter: none !important;
+}
+
+.card-image:hover {
+  filter: none;
+}
+
+#card-form {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+  justify-content: center;
+}
+
+#card-number {
+  width: 250px;
+  padding: 12px;
+  font-size: 18px;
+  text-align: center;
+  border: none;
+  border-radius: 5px;
+  background-color: rgba(255, 255, 255, 0.9);
+  color: #333;
+  font-family: 'Courier New', Courier, monospace;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+button {
+  padding: 12px 25px;
+  background-color: #4682b4;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #5e9cc7;
+}
+
+#result {
+  margin-top: 10px;
+  font-size: 18px;
+  font-weight: bold;
+  color: #2f4f4f;
+  text-align: center;
+  width: 100%;
+}
