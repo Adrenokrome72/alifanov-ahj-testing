@@ -9,4 +9,7 @@ app.use(express.static(join(__dirname, '..', 'dist')));
 
 app.listen(8080, () => {
   console.log('Server running at http://localhost:8080');
+  console.log('Server PID:', process.pid);
+}).on('error', (err) => {
+  console.error('Server error:', err.message);
 });
