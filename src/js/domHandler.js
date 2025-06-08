@@ -20,7 +20,7 @@ export function initCardValidator() {
     }
 
     function highlightIcon(system) {
-      console.log('Highlighting system:', system); // Логирование для отладки
+      console.log('Highlighting system:', system);
       resetIcons();
       if (system) {
         const activeImg = document.querySelector(`.card-image[data-system="${system}"]`);
@@ -34,10 +34,10 @@ export function initCardValidator() {
       const value = e.target.value.replace(/\D/g, '');
       const cleanedValue = value.slice(0, 16);
       e.target.value = cleanedValue;
-      console.log('Input value:', cleanedValue); // Логирование ввода
+      console.log('Input value:', cleanedValue);
       if (cleanedValue.length >= 4) {
         const system = getPaymentSystem(cleanedValue);
-        console.log('Detected system:', system); // Логирование системы
+        console.log('Detected system:', system);
         highlightIcon(system);
       } else {
         resetIcons();
@@ -56,9 +56,9 @@ export function initCardValidator() {
         return;
       }
 
-      console.log('Validating card:', cardNumber, 'System:', system, 'Valid:', isValidCard(cardNumber)); // Логирование валидации
+      console.log('Validating card:', cardNumber, 'System:', system, 'Valid:', isValidCard(cardNumber));
       if (system && isValidCard(cardNumber)) {
-        result.textContent = 'НОМЕР КАРТЫ КОРРЕКТЕН';
+        result.textContent = 'Номер карты подтвержден';
         highlightIcon(system);
       } else {
         result.textContent = 'Недействительный номер карты';

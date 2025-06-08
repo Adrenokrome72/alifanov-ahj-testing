@@ -55,13 +55,13 @@ describe('Форма валидатора кредитных карт', () => {
     expect(inputValue.length).toBe(16);
   });
 
-  test('должен показать "НОМЕР КАРТЫ КОРРЕКТЕН" для валидной Visa карты и подсветить иконку Visa', async () => {
+  test('должен показать "Номер карты подтвержден" для валидной Visa карты и подсветить иконку Visa', async () => {
     await page.reload();
     await page.type('#card-number', '4111111111111111'); // Валиден по Луна
     await page.click('button[type="submit"]');
     await new Promise(resolve => setTimeout(resolve, 1000));
     const resultText = await page.$eval('#result', (el) => el.textContent);
-    expect(resultText).toBe('НОМЕР КАРТЫ КОРРЕКТЕН');
+    expect(resultText).toBe('Номер карты подтвержден');
 
     const visaImageActive = await page.$eval('.card-image[data-system="visa"]', (el) => {
       const style = window.getComputedStyle(el);
@@ -84,13 +84,13 @@ describe('Форма валидатора кредитных карт', () => {
     expect(allImagesInactive).toBe(true);
   });
 
-  test('должен показать "НОМЕР КАРТЫ КОРРЕКТЕН" для валидной Мир карты и подсветить иконку Мир', async () => {
+  test('должен показать "Номер карты подтвержден" для валидной Мир карты и подсветить иконку Мир', async () => {
     await page.reload();
     await page.type('#card-number', '2200000000000053'); // Валиден по Луна
     await page.click('button[type="submit"]');
     await new Promise(resolve => setTimeout(resolve, 1000));
     const resultText = await page.$eval('#result', (el) => el.textContent);
-    expect(resultText).toBe('НОМЕР КАРТЫ КОРРЕКТЕН');
+    expect(resultText).toBe('Номер карты подтвержден');
 
     const mirImageActive = await page.$eval('.card-image[data-system="mir"]', (el) => {
       const style = window.getComputedStyle(el);
