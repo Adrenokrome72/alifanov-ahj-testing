@@ -23,7 +23,10 @@ jobs:
     - name: Run E2E Tests
       run: |
         npm run start &
+        SERVER_PID=$!
+        npx wait-on http://localhost:8080 --timeout 60000
         npm run test:e2e
+        kill $SERVER_PID 2>/dev/null || true
     - name: Build
       run: npm run build
     - name: Deploy to GitHub Pages

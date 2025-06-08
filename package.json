@@ -7,7 +7,7 @@
   "scripts": {
     "start": "node e2e/e2e.server.js",
     "test": "jest --testPathIgnorePatterns=e2e",
-    "test:e2e": "start /b node e2e/e2e.server.js && npx wait-on http://localhost:8080 && jest --testMatch \"<rootDir>/e2e/*.test.js\"",
+    "test:e2e": "jest --testMatch \"<rootDir>/e2e/*.test.js\"",
     "build": "webpack --config webpack.config.js"
   },
   "repository": {
