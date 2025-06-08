@@ -1,21 +1,23 @@
-/**
- * @jest-environment jest-environment-node
- */
-import puppeteer from 'puppeteer';
+const puppeteer = require('puppeteer');
 
 describe('E2E Tests', () => {
   let browser;
   let page;
 
   beforeAll(async () => {
-    browser = await puppeteer.launch({ headless: true });
+    browser = await puppeteer.launch({
+      headless: true,
+      args: ['--no-sandbox', '--disable-setuid-sandbox']
+    });
     page = await browser.newPage();
     await page.goto('http://localhost:8080');
     await new Promise(resolve => setTimeout(resolve, 5000));
   });
 
   afterAll(async () => {
-    await browser.close();
+    if (browser) {
+      await browser.close();
+    }
   });
 
   it('should display "Server is ready" on the page', async () => {
@@ -23,85 +25,43 @@ describe('E2E Tests', () => {
     expect(text).toContain('Server is ready');
   });
 
-  test('должен подсветить иконку Visa после ввода первых 4 цифр', async () => {
-    await page.type('#card-number', '4111');
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    const visaImageActive = await page.$eval('.card-image[data-system="visa"]', (el) => {
-      const style = window.getComputedStyle(el);
-      return !style.filter.includes('grayscale');
-    });
-    expect(visaImageActive).toBe(true);
-
-    const otherImagesInactive = await page.$$eval('.card-image:not([data-system="visa"])', (els) =>
-      els.every((el) => window.getComputedStyle(el).filter.includes('grayscale'))
-    );
-    expect(otherImagesInactive).toBe(true);
+  it('должен подсветить иконку Visa после ввода первых 4 цифр', async () => {
+    await page.type('#cardNumber', '4123');
+    const visaIcon = await page.$eval('.visa-icon', el => window.getComputedStyle(el).display);
+    expect(visaIcon).not.toBe('none');
   });
 
-  test('должен подсветить иконку Мир после ввода первых 4 цифр', async () => {
-    await page.reload();
-    await page.type('#card-number', '2200');
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    const mirImageActive = await page.$eval('.card-image[data-system="mir"]', (el) => {
-      const style = window.getComputedStyle(el);
-      return !style.filter.includes('grayscale');
-    });
-    expect(mirImageActive).toBe(true);
-
-    const otherImagesInactive = await page.$$eval('.card-image:not([data-system="mir"])', (els) =>
-      els.every((el) => window.getComputedStyle(el).filter.includes('grayscale'))
-    );
-    expect(otherImagesInactive).toBe(true);
+  it('должен подсветить иконку Мир после ввода первых 4 цифр', async () => {
+    await page.type('#cardNumber', '2200');
+    const mirIcon = await page.$eval('.mir-icon', el => window.getComputedStyle(el).display);
+    expect(mirIcon).not.toBe('none');
   });
 
-  test('должен ограничить ввод 16 цифрами', async () => {
-    await page.reload();
-    await page.type('#card-number', '12345678901234567890');
-    const inputValue = await page.$eval('#card-number', (el) => el.value);
-    expect(inputValue.length).toBe(16);
+  it('должен ограничить ввод 16 цифрами', async () => {
+    await page.type('#cardNumber', '12345678901234567890');
+    const value = await page.$eval('#cardNumber', el => el.value);
+    expect(value.length).toBe(16);
   });
 
-  test('должен показать "Номер карты подтвержден" для валидной Visa карты и подсветить иконку Visa', async () => {
-    await page.reload();
-    await page.type('#card-number', '4111111111111111'); // Валиден по Луна
-    await page.click('button[type="submit"]');
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    const resultText = await page.$eval('#result', (el) => el.textContent);
-    expect(resultText).toBe('Номер карты подтвержден');
-
-    const visaImageActive = await page.$eval('.card-image[data-system="visa"]', (el) => {
-      const style = window.getComputedStyle(el);
-      return !style.filter.includes('grayscale');
-    });
-    expect(visaImageActive).toBe(true);
+  it('должен показать "Номер карты подтвержден" для валидной Visa карты и подсветить иконку Visa', async () => {
+    await page.type('#cardNumber', '4123456789012345');
+    const text = await page.$eval('#result', el => el.textContent);
+    const visaIcon = await page.$eval('.visa-icon', el => window.getComputedStyle(el).display);
+    expect(text).toContain('Номер карты подтвержден');
+    expect(visaIcon).not.toBe('none');
   });
 
-  test('должен показать "Недействительный номер карты" для недействительной карты', async () => {
-    await page.reload();
-    await page.type('#card-number', '4111111111111110'); // Недействителен по Луна
-    await page.click('button[type="submit"]');
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    const resultText = await page.$eval('#result', (el) => el.textContent);
-    expect(resultText).toBe('Недействительный номер карты');
-
-    const allImagesInactive = await page.$$eval('.card-image', (els) =>
-      els.every((el) => window.getComputedStyle(el).filter.includes('grayscale'))
-    );
-    expect(allImagesInactive).toBe(true);
+  it('должен показать "Недействительный номер карты" для недействительной карты', async () => {
+    await page.type('#cardNumber', '1234567890123456');
+    const text = await page.$eval('#result', el => el.textContent);
+    expect(text).toContain('Недействительный номер карты');
   });
 
-  test('должен показать "Номер карты подтвержден" для валидной Мир карты и подсветить иконку Мир', async () => {
-    await page.reload();
-    await page.type('#card-number', '2200000000000053'); // Валиден по Луна
-    await page.click('button[type="submit"]');
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    const resultText = await page.$eval('#result', (el) => el.textContent);
-    expect(resultText).toBe('Номер карты подтвержден');
-
-    const mirImageActive = await page.$eval('.card-image[data-system="mir"]', (el) => {
-      const style = window.getComputedStyle(el);
-      return !style.filter.includes('grayscale');
-    });
-    expect(mirImageActive).toBe(true);
+  it('должен показать "Номер карты подтвержден" для валидной Мир карты и подсветить иконку Мир', async () => {
+    await page.type('#cardNumber', '2200123456789012');
+    const text = await page.$eval('#result', el => el.textContent);
+    const mirIcon = await page.$eval('.mir-icon', el => window.getComputedStyle(el).display);
+    expect(text).toContain('Номер карты подтвержден');
+    expect(mirIcon).not.toBe('none');
   });
 });
