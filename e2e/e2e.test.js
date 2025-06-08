@@ -8,6 +8,7 @@ describe('Форма валидатора кредитных карт', () => {
   let page;
 
   beforeAll(async () => {
+    await new Promise(resolve => setTimeout(resolve, 5000));
     browser = await puppeteer.launch({ headless: true });
     page = await browser.newPage();
     await page.goto('http://localhost:8080');
@@ -15,6 +16,11 @@ describe('Форма валидатора кредитных карт', () => {
 
   afterAll(async () => {
     await browser.close();
+  });
+
+  it(async () => {
+    const text = await page.evaluate(() => document.body.textContent);
+    expect(text).toContain('Server is ready');
   });
 
   test('должен подсветить иконку Visa после ввода первых 4 цифр', async () => {

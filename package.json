@@ -5,10 +5,9 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "node e2e/e2e.server.js",
-    "test": "jest --testPathIgnorePatterns=e2e",
-    "test:e2e": "jest --testMatch \"<rootDir>/e2e/*.test.js\"",
-    "build": "webpack --config webpack.config.js"
+  "start": "node e2e/e2e.server.js",
+  "test:e2e:run": "jest --testMatch \"<rootDir>/e2e/*.test.js\"",
+  "test:e2e": "npm-run-all --sequential start test:e2e:run"
   },
   "repository": {
     "type": "git",
