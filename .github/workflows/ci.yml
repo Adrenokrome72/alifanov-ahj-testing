@@ -24,7 +24,9 @@ jobs:
       run: |
         npm run start &
         SERVER_PID=$!
+        sleep 5  # Дополнительная задержка
         npx wait-on http://localhost:8080 --timeout 60000
+        curl -v http://localhost:8080  # Проверка доступности
         npm run test:e2e
         kill $SERVER_PID 2>/dev/null || true
     - name: Build
