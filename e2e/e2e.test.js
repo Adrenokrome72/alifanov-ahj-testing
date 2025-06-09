@@ -8,11 +8,11 @@ describe('Credit Card Validator E2E', () => {
     browser = await puppeteer.launch({
       headless: true,
       args: ['--no-sandbox', '--disable-setuid-sandbox'],
-      timeout: 10000, // Увеличенный тайм-аут для запуска браузера
+      timeout: 10000,
     });
     page = await browser.newPage();
     await page.goto('http://localhost:8080', { waitUntil: 'networkidle2' });
-  }, 15000); // Увеличенный тайм-аут для beforeAll
+  }, 15000);
 
   afterAll(async () => {
     if (browser) {
@@ -21,8 +21,8 @@ describe('Credit Card Validator E2E', () => {
   });
 
   beforeEach(async () => {
-    await page.reload({ waitUntil: 'networkidle2' }); // Перезагрузка страницы
-    await page.waitForSelector('#card-number'); // Ожидание поля ввода
+    await page.reload({ waitUntil: 'networkidle2' });
+    await page.waitForSelector('#card-number');
   });
 
   it('должен подсветить иконку Visa после ввода первых 4 цифр', async () => {
