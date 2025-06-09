@@ -7,7 +7,7 @@
   "scripts": {
     "start": "node e2e/e2e.server.js",
     "test": "jest --testPathIgnorePatterns=e2e",
-    "test:e2e": "npm-run-all --sequential test:e2e:run",
+    "test:e2e": "start-server-and-test start http://localhost:8080 test:e2e:run",
     "test:e2e:run": "jest --testMatch \"<rootDir>/e2e/*.test.js\"",
     "build": "webpack"
   },
