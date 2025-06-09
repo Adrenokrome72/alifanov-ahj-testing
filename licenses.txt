@@ -1,0 +1,4 @@
+Image Licenses
+- visa.png: Licensed under Creative Commons (source: findicons.com)
+- mastercard.png: Licensed under Creative Commons (source: findicons.com)
+- mir.png: Licensed under Creative Commons (source: findicons.com)
