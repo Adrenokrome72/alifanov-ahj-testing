@@ -1,38 +1,28 @@
-name: CI and Deploy to GitHub Pages
+name: CI
 
-on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+on: [push, pull_request]
 
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
+
     steps:
     - uses: actions/checkout@v4
-    - name: Setup Node.js
+
+    - name: Установка Node.js
       uses: actions/setup-node@v4
       with:
         node-version: '22'
         cache: 'npm'
-    - name: Install Dependencies
+
+    - name: Установка зависимостей
       run: npm ci
-    - name: Run Unit Tests
-      run: npm run test
-    - name: Run E2E Tests
-      run: |
-        npm run start &
-        SERVER_PID=$!
-        sleep 5  # Дополнительная задержка
-        npx wait-on http://localhost:8080 --timeout 60000
-        curl -v http://localhost:8080  # Проверка доступности
-        npm run test:e2e
-        kill $SERVER_PID 2>/dev/null || true
-    - name: Build
+
+    - name: Сборка проекта
       run: npm run build
-    - name: Deploy to GitHub Pages
-      if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-      uses: JamesIves/github-pages-deploy-action@v4
-      with:
-        folder: dist
+
+    - name: Запуск юнит-тестов
+      run: npm test
+
+    - name: Запуск E2E тестов
+      run: npm run test:e2e
